@@ -36,6 +36,7 @@ namespace BooksUse
             services.AddDbContext<BooksUseContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
