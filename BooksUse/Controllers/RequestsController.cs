@@ -20,7 +20,18 @@ namespace BooksUse.Models
         // GET: Requests
         public async Task<IActionResult> Index()
         {
-            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation);
+            //Get context
+            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Where(r => r == r);
+
+            //get current user
+            var currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
+
+            // Check role
+            if (currentUser.FkRoles == 1)
+            {
+                booksUseContext = booksUseContext.Where(r => r.FkUsersNavigation.Id == currentUser.Id);
+            }
+
             return View(await booksUseContext.ToListAsync());
         }
 
@@ -47,8 +58,8 @@ namespace BooksUse.Models
         // GET: Requests/Create
         public IActionResult Create()
         {
-            ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Author");
-            ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName");
+            //ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Author");
+            //ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
         }
 
@@ -57,17 +68,26 @@ namespace BooksUse.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ForYear,Approved,FkUsers,FkBooks")] Requests requests)
+        public async Task<IActionResult> Create([Bind("ForYear")] Requests requests)
         {
-            if (ModelState.IsValid)
+            var yearRequests = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Where(r => r.ForYear == requests.ForYear - 1);
+            foreach(var el in yearRequests)
             {
-                _context.Add(requests);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                var newEl = new Requests { Approved = 0, FkBooks = el.FkBooks, FkUsers = el.FkUsers, ForYear = requests.ForYear };
+                _context.Add(newEl);
             }
-            ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Author", requests.FkBooks);
-            ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName", requests.FkUsers);
-            return View(requests);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+            //if (ModelState.IsValid)
+            //{
+            //    _context.Add(requests);
+            //    await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Index));
+            //}
+            ////ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Author", requests.FkBooks);
+            ////ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName", requests.FkUsers);
+            //return View(requests);
         }
 
         // GET: Requests/Edit/5
