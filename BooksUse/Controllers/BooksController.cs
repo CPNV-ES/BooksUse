@@ -71,6 +71,14 @@ namespace BooksUse.Controllers
             {
                 _context.Add(books);
                 await _context.SaveChangesAsync();
+                if(_currentUser.FkRoles == 1)
+                {
+                    var currentYear = await _context.Years.Where(r => r.Open == true).OrderByDescending(r => r.Title).FirstOrDefaultAsync();
+                    var requests = new Requests { Approved = 1, FkBooks = books.Id, FkUsers = _currentUser.Id, FkYears = currentYear.Id };
+                    _context.Add(requests);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Index", "Requests");
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(books);
