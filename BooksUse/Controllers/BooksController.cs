@@ -6,16 +6,28 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BooksUse.Models;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace BooksUse.Controllers
 {
     public class BooksController : Controller
     {
         private readonly BooksUseContext _context;
+        private static Users _currentUser;
 
         public BooksController(BooksUseContext context)
         {
             _context = context;
+        }
+
+        public override async void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            if (_currentUser == null)
+            {
+                _currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
+            }
+            ViewBag.user = _currentUser; //Add whatever
+            base.OnActionExecuting(filterContext);
         }
 
         // GET: Books
