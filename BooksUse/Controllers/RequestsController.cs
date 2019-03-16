@@ -34,7 +34,7 @@ namespace BooksUse.Models
         public async Task<IActionResult> Index()
         {
             //Get context
-            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Where(r => r == r);
+            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r == r);
 
             // Check role
             if (_currentUser.FkRoles == 1)
@@ -76,6 +76,7 @@ namespace BooksUse.Models
             var requests = await _context.Requests
                 .Include(r => r.FkBooksNavigation)
                 .Include(r => r.FkUsersNavigation)
+                .Include(r => r.FkYearsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (requests == null)
             {
@@ -106,22 +107,22 @@ namespace BooksUse.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ForYear", "FkBooks")] Requests requests)
+        public async Task<IActionResult> Create([Bind("FkYears", "FkBooks")] Requests requests)
         {
-            if(requests.ForYear != 0)
+            if(requests.FkYears != 0)
             {
-                var yearRequests = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Where(r => r.ForYear == requests.ForYear - 1);
+                var yearRequests = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == requests.FkYears - 1);
                 foreach (var el in yearRequests)
                 {
-                    var newEl = new Requests { Approved = 0, FkBooks = el.FkBooks, FkUsers = el.FkUsers, ForYear = requests.ForYear };
+                    var newEl = new Requests { Approved = 0, FkBooks = el.FkBooks, FkUsers = el.FkUsers, FkYears = requests.FkYears };
                     _context.Add(newEl);
                 }
                 
             }
             else if (requests.FkBooks != 0)
             {
-                var recentRequest = await _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).OrderByDescending(r => r.ForYear).FirstAsync();
-                requests.ForYear = recentRequest.ForYear;
+                var recentRequest = await _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).OrderByDescending(r => r.FkYears).FirstAsync();
+                requests.FkYears = recentRequest.FkYears;
 
                 requests.FkUsers = _currentUser.Id;
 
@@ -210,6 +211,7 @@ namespace BooksUse.Models
             var requests = await _context.Requests
                 .Include(r => r.FkBooksNavigation)
                 .Include(r => r.FkUsersNavigation)
+                .Include(r => r.FkYearsNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (requests == null)
             {
