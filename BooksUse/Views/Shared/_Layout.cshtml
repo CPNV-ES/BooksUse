@@ -39,8 +39,14 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Les Livres</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Requests" asp-action="Index">Demandes</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Demandes
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Requests" asp-action="Index">Toutes les demandes</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Requests" asp-action="IndexPending">En attente de confirmation</a>
+                                </div>
                             </li>
                         }
 
