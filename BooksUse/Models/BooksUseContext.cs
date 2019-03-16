@@ -19,6 +19,7 @@ namespace BooksUse.Models
         public virtual DbSet<Requests> Requests { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<Users> Users { get; set; }
+        public virtual DbSet<Years> Years { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,12 +32,12 @@ namespace BooksUse.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
 
             modelBuilder.Entity<Books>(entity =>
             {
                 entity.HasIndex(e => e.Isbn)
-                    .HasName("UQ__Books__447D36EA9DF612C8")
+                    .HasName("UQ__Books__447D36EA02528D3C")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -47,7 +48,11 @@ namespace BooksUse.Models
                     .HasMaxLength(45)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Isbn).HasColumnName("ISBN");
+                entity.Property(e => e.Isbn)
+                    .IsRequired()
+                    .HasColumnName("ISBN")
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Price)
                     .HasColumnName("price")
@@ -60,10 +65,6 @@ namespace BooksUse.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.UnitsInStock).HasColumnName("unitsInStock");
-
-                entity.Property(e => e.Year)
-                    .HasColumnName("year")
-                    .HasColumnType("date");
             });
 
             modelBuilder.Entity<Requests>(entity =>
@@ -76,7 +77,7 @@ namespace BooksUse.Models
 
                 entity.Property(e => e.FkUsers).HasColumnName("FK_Users");
 
-                entity.Property(e => e.ForYear).HasColumnName("forYear");
+                entity.Property(e => e.FkYears).HasColumnName("FK_Years");
 
                 entity.HasOne(d => d.FkBooksNavigation)
                     .WithMany(p => p.Requests)
@@ -89,6 +90,12 @@ namespace BooksUse.Models
                     .HasForeignKey(d => d.FkUsers)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Users");
+
+                entity.HasOne(d => d.FkYearsNavigation)
+                    .WithMany(p => p.Requests)
+                    .HasForeignKey(d => d.FkYears)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Years");
             });
 
             modelBuilder.Entity<Roles>(entity =>
@@ -105,19 +112,19 @@ namespace BooksUse.Models
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasIndex(e => e.Email)
-                    .HasName("UQ__Users__AB6E6164D9D94EB3")
+                    .HasName("UQ__Users__AB6E6164217F3498")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Initials)
-                    .HasName("UQ__Users__696DB02C0AF92D3B")
+                    .HasName("UQ__Users__696DB02CB9BD6C85")
                     .IsUnique();
 
                 entity.HasIndex(e => e.IntranetUserId)
-                    .HasName("UQ__Users__C5DF48D8AE6214E2")
+                    .HasName("UQ__Users__C5DF48D8D10B4C3A")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Phone)
-                    .HasName("UQ__Users__B43B145F8406C4FC")
+                    .HasName("UQ__Users__B43B145FED59F183")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -165,6 +172,15 @@ namespace BooksUse.Models
                     .HasForeignKey(d => d.FkRoles)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Roles");
+            });
+
+            modelBuilder.Entity<Years>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Open).HasColumnName("open");
+
+                entity.Property(e => e.Title).HasColumnName("title");
             });
         }
     }
