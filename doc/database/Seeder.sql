@@ -17,8 +17,8 @@ VALUES ('Professeurs'),
 ('Secrétariat');
 
 INSERT INTO Years (title, [open])
-VALUES (2016, 2),
-(2017, 2),
+VALUES (2016, 0),
+(2017, 0),
 (2018, 1);
 
 INSERT INTO Users (intranetUserID, initials, firstName, lastName, FK_Roles, email, phone, [password])
