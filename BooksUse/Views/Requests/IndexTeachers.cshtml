@@ -1,0 +1,60 @@
+﻿@model IEnumerable<BooksUse.Models.Requests>
+
+@*@{
+    ViewData["Title"] = "Index";
+}*@
+
+<h1>Mes livres à approuver</h1>
+
+<p>
+    <a asp-action="Create">J'ai besoin d'un autre livre</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FkBooksNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FkUsersNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ForYear)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approved)
+            </th>
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FkBooksNavigation.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FkUsersNavigation.FirstName) @Html.DisplayFor(modelItem => item.FkUsersNavigation.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ForYear)
+                </td>
+                <td>
+                    @if (item.Approved == 1)
+                    {
+                        <span>Approuvé</span>;
+                    }
+                    else
+                    {
+                        <a asp-action="Approved" asp-route-id="@item.Id">Approuver</a>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
