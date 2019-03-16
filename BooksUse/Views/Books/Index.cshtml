@@ -13,22 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Title)
+                Titre
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Isbn)
+                ISBN
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Year)
+                Auteur(s)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                Stock
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UnitsInStock)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
+                Prix
             </th>
             <th></th>
         </tr>
@@ -43,9 +40,6 @@
                 @Html.DisplayFor(modelItem => item.Isbn)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Year)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Author)
             </td>
             <td>
@@ -55,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edition</a> |
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.Id">Suppression</a>
             </td>
         </tr>
 }

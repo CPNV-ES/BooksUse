@@ -13,19 +13,19 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FkBooksNavigation)
+                Livre
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FkUsersNavigation)
+                Demandeur
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ForYear)
+                Année
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Approved)
+                Approuvé
             </th>
 
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -38,14 +38,14 @@
                 @Html.DisplayFor(modelItem => item.FkUsersNavigation.FirstName) @Html.DisplayFor(modelItem => item.FkUsersNavigation.LastName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ForYear)
+                @Html.DisplayFor(modelItem => item.FkYearsNavigation.Title)
             </td>
             <td>
                 @((item.Approved == 1) ? "Oui" : "Non")
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @*<a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |*@
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
                 <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
             </td>
         </tr>

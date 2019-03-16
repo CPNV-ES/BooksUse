@@ -13,19 +13,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.FkBooksNavigation)
+                Livre
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FkUsersNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ForYear)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Approved)
+                Status
             </th>
 
-            <th></th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -34,12 +28,6 @@
             <tr>
                 <td>
                     @Html.DisplayFor(modelItem => item.FkBooksNavigation.Title)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FkUsersNavigation.FirstName) @Html.DisplayFor(modelItem => item.FkUsersNavigation.LastName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ForYear)
                 </td>
                 <td>
                     @if (item.Approved == 1)
