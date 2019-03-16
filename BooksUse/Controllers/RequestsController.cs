@@ -13,6 +13,7 @@ namespace BooksUse.Models
     {
         private readonly BooksUseContext _context;
         private static Users _currentUser;
+        private static Years _currentYear;
 
         public RequestsController(BooksUseContext context)
         {
@@ -22,19 +23,30 @@ namespace BooksUse.Models
 
         public override async void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            await setStaticVariables();
+            ViewBag.user = _currentUser; //Add whatever
+            base.OnActionExecuting(filterContext);
+        }
+
+        private async Task setStaticVariables()
+        {
             if (_currentUser == null)
             {
                 _currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
             }
-            ViewBag.user = _currentUser; //Add whatever
-            base.OnActionExecuting(filterContext);
+            if (_currentYear == null)
+            {
+                _currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
+            }
         }
 
         // GET: Requests
         public async Task<IActionResult> Index()
         {
+            await setStaticVariables();
+
             //Get context
-            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r == r);
+            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == _currentYear.Id);
 
             // Check role
             if (_currentUser.FkRoles == 1)
@@ -42,9 +54,16 @@ namespace BooksUse.Models
                 booksUseContext = booksUseContext.Where(r => r.FkUsersNavigation.Id == _currentUser.Id);
                 return View("indexTeachers", await booksUseContext.ToListAsync());
             }
-
-            
+    
             return View(await booksUseContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> IndexPending()
+        {
+            //Get context
+            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == _currentYear.Id && r.Approved == 0);
+
+            return View("Index", await booksUseContext.ToListAsync());
         }
 
         public async Task<IActionResult> Approved(int? id)
