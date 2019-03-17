@@ -69,6 +69,10 @@ namespace BooksUse
                     template: "requests",
                     defaults: new { controller = "Requests", action = "Index" });
                 routes.MapRoute(
+                    name: "years",
+                    template: "years",
+                    defaults: new { controller = "Years", action = "Index" });
+                routes.MapRoute(
                     name: "default",
                     template: "{controller=Start}/{action=Index}/{id?}");
             });
