@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BooksUse.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,56 +13,54 @@ namespace BooksUse.Models
     public class RequestsController : Controller
     {
         private readonly BooksUseContext _context;
-        private static Users _currentUser;
-        private static Years _currentYear;
 
         public RequestsController(BooksUseContext context)
         {
             _context = context;
         }
 
-
-        public override async void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            await setStaticVariables();
-            ViewBag.user = _currentUser; //Add whatever
+            ViewBag.user = StartController._currentUser; //Add whatever
             base.OnActionExecuting(filterContext);
-        }
-
-        private async Task setStaticVariables()
-        {
-            if (_currentUser == null)
-            {
-                _currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
-            }
-            if (_currentYear == null)
-            {
-                _currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
-            }
         }
 
         // GET: Requests
         public async Task<IActionResult> Index()
         {
-            await setStaticVariables();
+            StartController._currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
 
-            //Get context
-            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == _currentYear.Id);
+            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r == r);
+
+            if (StartController._currentYear != null)
+            {
+                booksUseContext = booksUseContext.Where(r => r.FkYears == StartController._currentYear.Id);
+            }
 
             // Check role
-            if (_currentUser.FkRoles == 1)
+            if (StartController._currentUser.FkRoles == 1)
             {
-                booksUseContext = booksUseContext.Where(r => r.FkUsersNavigation.Id == _currentUser.Id);
+                booksUseContext = booksUseContext.Where(r => r.FkUsersNavigation.Id == StartController._currentUser.Id);
                 return View("indexTeachers", await booksUseContext.ToListAsync());
             }
-    
+            ViewData["Name"] = "Liste des demandes";
+
+
             return View(await booksUseContext.ToListAsync());
         }
 
         public async Task<IActionResult> IndexPending()
         {
+            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYearsNavigation.Open == true);
+
+            if (StartController._currentYear == null)
+            {
+                return View("Index", await booksUseContext.ToListAsync());
+            }
             //Get context
-            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == _currentYear.Id && r.Approved == 0);
+            booksUseContext = booksUseContext.Where(r => r.FkYears == StartController._currentYear.Id && r.Approved == 0);
+
+            ViewData["Name"] = "Liste des demandes en attente d'approbation";
 
             return View("Index", await booksUseContext.ToListAsync());
         }
@@ -109,7 +108,16 @@ namespace BooksUse.Models
         public IActionResult Create()
         {
             ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Title");
-            if(_currentUser.FkRoles == 1)
+            //ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName");
+
+            ViewData["FkUsers"] = from u in _context.Users
+                                  select new SelectListItem
+                                  {
+                                      Value = u.Id.ToString(),
+                                      Text = u.FirstName + " " + u.LastName
+                                  };
+
+            if (StartController._currentUser.FkRoles == 1)
             {
                 return View("createTeachers");
             }
@@ -126,30 +134,21 @@ namespace BooksUse.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FkYears", "FkBooks")] Requests requests)
+        public async Task<IActionResult> Create([Bind("FkYears", "FkBooks", "FkUsers")] Requests requests)
         {
-            if(requests.FkYears != 0)
+            requests.FkYears = StartController._currentYear.Id;
+            requests.Approved = 1;
+
+            if (requests.FkUsers != 0)
             {
-                var yearRequests = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == requests.FkYears - 1);
-                foreach (var el in yearRequests)
-                {
-                    var newEl = new Requests { Approved = 0, FkBooks = el.FkBooks, FkUsers = el.FkUsers, FkYears = requests.FkYears };
-                    _context.Add(newEl);
-                }
-                
+                requests.FkUsers = requests.FkUsers;
             }
-            else if (requests.FkBooks != 0)
+            else
             {
-                var recentRequest = await _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).OrderByDescending(r => r.FkYears).FirstAsync();
-                requests.FkYears = recentRequest.FkYears;
-
-                requests.FkUsers = _currentUser.Id;
-
-                requests.Approved = 1;
-
-                _context.Add(requests);
+                requests.FkUsers = StartController._currentUser.Id;
             }
 
+            _context.Add(requests);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
 

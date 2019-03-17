@@ -13,20 +13,15 @@ namespace BooksUse.Controllers
     public class BooksController : Controller
     {
         private readonly BooksUseContext _context;
-        private static Users _currentUser;
 
         public BooksController(BooksUseContext context)
         {
             _context = context;
         }
 
-        public override async void OnActionExecuting(ActionExecutingContext filterContext)
+        public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (_currentUser == null)
-            {
-                _currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
-            }
-            ViewBag.user = _currentUser; //Add whatever
+            ViewBag.user = StartController._currentUser; //Add whatever
             base.OnActionExecuting(filterContext);
         }
 
@@ -71,10 +66,10 @@ namespace BooksUse.Controllers
             {
                 _context.Add(books);
                 await _context.SaveChangesAsync();
-                if(_currentUser.FkRoles == 1)
+                if(StartController._currentUser.FkRoles == 1)
                 {
                     var currentYear = await _context.Years.Where(r => r.Open == true).OrderByDescending(r => r.Title).FirstOrDefaultAsync();
-                    var requests = new Requests { Approved = 1, FkBooks = books.Id, FkUsers = _currentUser.Id, FkYears = currentYear.Id };
+                    var requests = new Requests { Approved = 1, FkBooks = books.Id, FkUsers = StartController._currentUser.Id, FkYears = currentYear.Id };
                     _context.Add(requests);
                     await _context.SaveChangesAsync();
                     return RedirectToAction("Index", "Requests");

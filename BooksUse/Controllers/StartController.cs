@@ -11,6 +11,8 @@ namespace BooksUse.Controllers
     public class StartController : Controller
     {
         private readonly BooksUseContext _context;
+        public static Users _currentUser;
+        public static Years _currentYear;
 
         public StartController(BooksUseContext context)
         {
@@ -19,23 +21,28 @@ namespace BooksUse.Controllers
 
         public async Task<IActionResult> Index(BooksUseContext context)
         {
-            //get current user
-            var currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
 
-            if(currentUser.FkRoles == 1)
+            await setStaticVariables();
+
+            if(_currentUser.FkRoles == 1)
             {
                 return RedirectToAction("Index", "Requests");
             }
-            else if(currentUser.FkRoles == 2)
+            else if(_currentUser.FkRoles == 2)
             {
-                return RedirectToAction("Index", "Books");
+                return RedirectToAction("IndexPending", "Requests");
             }
             else
             {
                 return NotFound();
             }
+ 
+        }
 
-            
+        public async Task setStaticVariables()
+        {
+            _currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
+            _currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
         }
     }
 }
