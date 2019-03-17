@@ -1,0 +1,43 @@
+﻿@model IEnumerable<BooksUse.Models.Years>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Liste des années</h4>
+
+<p>
+    <a asp-action="Create">Générer une nouvelle année</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Année
+            </th>
+            <th>
+                Status
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @(item.Open == true ? "Ouverte" : "Fermée")
+            </td>
+            <td>
+                @if (item.Open == true)
+                {
+                    <a asp-action="Close" asp-route-id="@item.Id">Clore</a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
