@@ -13,31 +13,31 @@
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Title" class="control-label">Titre</label>
-                <input asp-for="Title" class="form-control" />
+                <input id="title" asp-for="Title" class="form-control" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Isbn" class="control-label">ISBN</label>
-                <input asp-for="Isbn" class="form-control" />
+                <input id="isbn" asp-for="Isbn" class="form-control" />
                 <span asp-validation-for="Isbn" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Author" class="control-label">Auteur(s)</label>
-                <input asp-for="Author" class="form-control" />
+                <input id="author" asp-for="Author" class="form-control" />
                 <span asp-validation-for="Author" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UnitsInStock" class="control-label">Stock</label>
-                <input asp-for="UnitsInStock" class="form-control" />
+                <input id="stock" asp-for="UnitsInStock" class="form-control" />
                 <span asp-validation-for="UnitsInStock" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label">Prix</label>
-                <input asp-for="Price" class="form-control" />
+                <input id="price" asp-for="Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Sauvegarder" class="btn btn-primary" />
+                <input type="submit" value="Sauvegarder" class="btn btn-primary submitBooksButton" />
             </div>
         </form>
     </div>
@@ -46,6 +46,8 @@
 <div>
     <a asp-action="Index">Retour</a>
 </div>
+
+<script src="~/js/site.js"></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
