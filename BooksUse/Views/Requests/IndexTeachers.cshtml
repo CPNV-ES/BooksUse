@@ -25,24 +25,25 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FkBooksNavigation.Title)
-                </td>
-                <td>
-                    @if (item.Approved == 1)
-                    {
-                        <span>Approuvé</span>;
-                    }
-                    else
-                    {
-                        <a asp-action="Approved" asp-route-id="@item.Id">Approuver</a>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
-                </td>
-            </tr>
-        }
-    </tbody>
+            var style = (item.Approved == 0) ? "alert alert-warning" : "";
+                <tr class="@style">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FkBooksNavigation.Title)
+                    </td>
+                    <td>
+                        @if (item.Approved == 1)
+                        {
+                            <span>Déja approuvé</span>;
+                        }
+                        else
+                        {
+                            <a asp-action="Approved" asp-route-id="@item.Id">J'en ai besoin</a>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
 </table>
