@@ -6,20 +6,21 @@
 }
 
 <h4>Liste des années</h4>
-
+<br />
 <p>
-    <a asp-action="Create">Générer une nouvelle année</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Générer une nouvelle année</a>
 </p>
+
 <table class="table">
     <thead>
-        <tr>
+        <tr class="text-primary text-center">
             <th>
                 Année
             </th>
             <th>
                 Status
             </th>
-            <th>Actions</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
@@ -28,13 +29,20 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
-            <td>
-                @(item.Open == true ? "Ouverte" : "Fermée")
-            </td>
-            <td>
+            <td class="text-center">
                 @if (item.Open == true)
                 {
-                    <a asp-action="Close" asp-route-id="@item.Id">Clore</a>
+                    <i class="mdi mdi-lock-open text-success" style="font-size: 20px;"></i>
+                }
+                else {
+                    <i class="mdi mdi-lock text-danger" style="font-size: 20px;"></i>
+                }
+
+                </td>
+            <td class="text-center">
+                @if (item.Open == true)
+                {
+                    <a asp-action="Close" asp-route-id="@item.Id"><i class="mdi mdi-lock-outline" style="font-size: 20px;"></i></a>
                 }
             </td>
         </tr>

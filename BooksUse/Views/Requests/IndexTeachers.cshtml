@@ -4,14 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Mes livres à approuver</h1>
-
+<h4>Mes livres à approuver</h4>
+<br />
 <p>
-    <a asp-action="Create">J'ai besoin d'un autre livre</a>
+    <a asp-action="Create" class="btn btn-outline-primary">J'ai besoin d'un autre livre</a>
 </p>
 <table class="table">
     <thead>
-        <tr>
+        <tr class="text-primary text-center">
             <th>
                 Livre
             </th>
@@ -25,23 +25,23 @@
     <tbody>
         @foreach (var item in Model)
         {
-            var style = (item.Approved == 0) ? "alert alert-warning" : "";
+            var style = (item.Approved == 0) ? "alert alert-warning" : "alert alert-success";
                 <tr class="@style">
                     <td>
                         @Html.DisplayFor(modelItem => item.FkBooksNavigation.Title)
                     </td>
-                    <td>
+                    <td class="text-center">
                         @if (item.Approved == 1)
                         {
-                            <span>Déja approuvé</span>;
+                            <span><i class="mdi mdi-checkbox-marked-circle-outline" style="font-size: 20px;"></i> Déja approuvé</span>;
                         }
                         else
                         {
-                            <a asp-action="Approved" asp-route-id="@item.Id">J'en ai besoin</a>
+                            <a asp-action="Approved" asp-route-id="@item.Id"><i class="mdi mdi-checkbox-blank-circle-outline" style="font-size: 20px;"></i> J'en ai besoin</a>
                         }
                     </td>
-                    <td>
-                        <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                    <td class="text-center">
+                        <a asp-action="Delete" asp-route-id="@item.Id"><i class="mdi mdi-delete text-danger" style="font-size: 20px;"></i></a>
                     </td>
                 </tr>
             }

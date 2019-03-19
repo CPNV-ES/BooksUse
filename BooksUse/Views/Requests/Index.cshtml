@@ -5,13 +5,13 @@
 }
 
 <h4>@(ViewData["Name"])</h4>
-
+<br />
 <p>
-    <a asp-action="Create">Nouvelle demande</a>
+    <a asp-action="Create" class="btn btn-outline-primary">Nouvelle demande</a>
 </p>
 <table class="table">
     <thead>
-        <tr>
+        <tr class="text-primary text-center">
             <th>
                 Livre
             </th>
@@ -34,19 +34,19 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FkBooksNavigation.Title)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.FkUsersNavigation.FirstName) @Html.DisplayFor(modelItem => item.FkUsersNavigation.LastName)
             </td>
-            <td>
+            <td class="text-center">
                 @Html.DisplayFor(modelItem => item.FkYearsNavigation.Title)
             </td>
-            <td>
+            <td class="text-center">
                 @((item.Approved == 1) ? "Oui" : "Non")
             </td>
-            <td>
+            <td class="text-center">
                 @*<a asp-action="Edit" asp-route-id="@item.Id">Editer</a> |*@
                 @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
-                <a asp-action="Delete" asp-route-id="@item.Id">Supprimer</a>
+                <a asp-action="Delete" asp-route-id="@item.Id"><i class="mdi mdi-delete text-danger" style="font-size: 20px;"></i></a>
             </td>
         </tr>
 }

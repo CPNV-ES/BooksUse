@@ -5,7 +5,7 @@
 }
 
 <h4>Ajouter un livre</h4>
-<hr />
+<br />
 <div class="row">
     <div class="col-md-4">
         <form id="form" asp-action="Create">
@@ -36,7 +36,7 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Ajouter" class="btn btn-primary submitBooksButton" />
+                <input type="submit" value="Ajouter" class="btn btn-outline-success submitBooksButton" />
             </div>
         </form>
     </div>
@@ -46,7 +46,7 @@
     <a asp-controller="Start" asp-action="Index">Retour</a>
 </div>
 
-<script type="text/javascript" src='/js/site.js'></script>
+<script type="text/javascript" src='/js/books.min.js'></script>
 
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
