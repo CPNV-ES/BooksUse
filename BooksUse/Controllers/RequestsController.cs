@@ -40,7 +40,7 @@ namespace BooksUse.Models
             // Check role
             if (StartController._currentUser.FkRoles == 1)
             {
-                booksUseContext = booksUseContext.Where(r => r.FkUsersNavigation.Id == StartController._currentUser.Id);
+                booksUseContext = booksUseContext.Where(r => r.FkUsersNavigation.Id == StartController._currentUser.Id).OrderBy(r => r.Approved);
                 return View("indexTeachers", await booksUseContext.ToListAsync());
             }
             ViewData["Name"] = "Liste des demandes";
