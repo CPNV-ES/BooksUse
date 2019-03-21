@@ -12,14 +12,14 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FkUsers" class="control-label">Professeur</label>
-                <select asp-for="FkUsers" class ="form-control" asp-items="ViewBag.FkUsers"></select>
+                <select id="userSelect" asp-for="FkUsers" class ="form-control" asp-items="ViewBag.FkUsers"></select>
             </div>
             <div class="form-group">
                 <label asp-for="FkBooks" class="control-label">Livre</label>
-                <select asp-for="FkBooks" class ="form-control" asp-items="ViewBag.FkBooks"></select>
+                <select id="booksSelect" asp-for="FkBooks" class ="form-control" asp-items="ViewBag.FkBooks"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Ajouter" class="btn btn-primary" />
+                <input id="submitButton" type="submit" value="Ajouter" class="btn btn-primary" />
             </div>
         </form>
     </div>
@@ -28,6 +28,8 @@
 <div>
     <a asp-action="Index">Retour</a>
 </div>
+
+<script type="text/javascript" src='/js/userSelect.min.js'></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
