@@ -106,6 +106,7 @@ CREATE TABLE Requests (
     ON UPDATE NO ACTION)
 
 CREATE TABLE SchoolClasses_Requests (
+  id INT NOT NULL IDENTITY PRIMARY KEY,
   FK_SchoolClasses INT NOT NULL,
   FK_Requests INT NOT NULL,
   CONSTRAINT FK_SchoolClasses
