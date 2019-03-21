@@ -46,7 +46,6 @@ namespace BooksUse.Models
             }
             ViewData["Name"] = "Liste des demandes";
 
-
             return View(await booksUseContext.ToListAsync());
         }
 
@@ -113,12 +112,7 @@ namespace BooksUse.Models
             
             //ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName");
 
-            ViewData["FkUsers"] = from u in _context.Users
-                                  select new SelectListItem
-                                  {
-                                      Value = u.Id.ToString(),
-                                      Text = u.FirstName + " " + u.LastName
-                                  };
+            
 
             if (StartController._currentUser.FkRoles == 1)
             {
@@ -132,6 +126,13 @@ namespace BooksUse.Models
             }
             else
             {
+                ViewData["FkUsers"] = from u in _context.Users.Where(r => r.FkRoles == 1)
+                                      select new SelectListItem
+                                      {
+                                          Value = u.Id.ToString(),
+                                          Text = u.FirstName + " " + u.LastName
+                                      };
+
                 ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Title");
                 return View();
             }
