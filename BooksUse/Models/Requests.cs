@@ -5,6 +5,11 @@ namespace BooksUse.Models
 {
     public partial class Requests
     {
+        public Requests()
+        {
+            SchoolClassesRequests = new HashSet<SchoolClassesRequests>();
+        }
+
         public int Id { get; set; }
         public int Approved { get; set; }
         public int FkYears { get; set; }
@@ -14,5 +19,6 @@ namespace BooksUse.Models
         public virtual Books FkBooksNavigation { get; set; }
         public virtual Users FkUsersNavigation { get; set; }
         public virtual Years FkYearsNavigation { get; set; }
+        public virtual ICollection<SchoolClassesRequests> SchoolClassesRequests { get; set; }
     }
 }

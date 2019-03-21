@@ -18,6 +18,8 @@ namespace BooksUse.Models
         public virtual DbSet<Books> Books { get; set; }
         public virtual DbSet<Requests> Requests { get; set; }
         public virtual DbSet<Roles> Roles { get; set; }
+        public virtual DbSet<SchoolClasses> SchoolClasses { get; set; }
+        public virtual DbSet<SchoolClassesRequests> SchoolClassesRequests { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Years> Years { get; set; }
 
@@ -32,12 +34,12 @@ namespace BooksUse.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.HasAnnotation("ProductVersion", "2.2.3-servicing-35854");
+            modelBuilder.HasAnnotation("ProductVersion", "2.2.2-servicing-10034");
 
             modelBuilder.Entity<Books>(entity =>
             {
                 entity.HasIndex(e => e.Isbn)
-                    .HasName("UQ__Books__447D36EA02528D3C")
+                    .HasName("UQ__Books__447D36EA794D8128")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -109,22 +111,58 @@ namespace BooksUse.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<SchoolClasses>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Name)
+                    .IsRequired()
+                    .HasColumnName("name")
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Studentsnumber).HasColumnName("studentsnumber");
+            });
+
+            modelBuilder.Entity<SchoolClassesRequests>(entity =>
+            {
+                entity.ToTable("SchoolClasses_Requests");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.FkRequests).HasColumnName("FK_Requests");
+
+                entity.Property(e => e.FkSchoolClasses).HasColumnName("FK_SchoolClasses");
+
+                entity.HasOne(d => d.FkRequestsNavigation)
+                    .WithMany(p => p.SchoolClassesRequests)
+                    .HasForeignKey(d => d.FkRequests)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Requests");
+
+                entity.HasOne(d => d.FkSchoolClassesNavigation)
+                    .WithMany(p => p.SchoolClassesRequests)
+                    .HasForeignKey(d => d.FkSchoolClasses)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_SchoolClasses");
+            });
+
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasIndex(e => e.Email)
-                    .HasName("UQ__Users__AB6E6164217F3498")
+                    .HasName("UQ__Users__AB6E61645E4DF7BE")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Initials)
-                    .HasName("UQ__Users__696DB02CB9BD6C85")
+                    .HasName("UQ__Users__696DB02C7B886387")
                     .IsUnique();
 
                 entity.HasIndex(e => e.IntranetUserId)
-                    .HasName("UQ__Users__C5DF48D8D10B4C3A")
+                    .HasName("UQ__Users__C5DF48D80801DA1A")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Phone)
-                    .HasName("UQ__Users__B43B145FED59F183")
+                    .HasName("UQ__Users__B43B145FA8CF4C14")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
