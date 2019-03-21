@@ -19,8 +19,9 @@ namespace BooksUse.Models
             _context = context;
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
+        public override async void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            StartController._currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
             ViewBag.user = StartController._currentUser; //Add whatever
             base.OnActionExecuting(filterContext);
         }
@@ -51,6 +52,8 @@ namespace BooksUse.Models
 
         public async Task<IActionResult> IndexPending()
         {
+            StartController._currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
+
             var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYearsNavigation.Open == true);
 
             if (StartController._currentYear == null)
@@ -105,9 +108,9 @@ namespace BooksUse.Models
         }
 
         // GET: Requests/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Title");
+            
             //ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName");
 
             ViewData["FkUsers"] = from u in _context.Users
@@ -119,10 +122,17 @@ namespace BooksUse.Models
 
             if (StartController._currentUser.FkRoles == 1)
             {
+                var requests = await _context.Requests.Where(r => r.FkUsers == StartController._currentUser.Id).ToListAsync();
+                var idBooks = requests.Select(b => b.FkBooks).ToArray();
+
+                var books = await _context.Books.Where(r => Array.IndexOf(idBooks, r.Id) == -1).ToListAsync();
+
+                ViewData["FkBooks"] = new SelectList(books, "Id", "Title");
                 return View("createTeachers");
             }
             else
             {
+                ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Title");
                 return View();
             }
 
