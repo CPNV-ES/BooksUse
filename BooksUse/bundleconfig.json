@@ -10,7 +10,18 @@
     "inputFiles": [
       "Javascript/books.js"
     ],
-   "minify": {
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/userSelect.min.js",
+    "inputFiles": [
+      "Javascript/userSelect.js"
+    ],
+    "minify": {
       "enabled": true,
       "renameLocals": true
     },
