@@ -16,6 +16,16 @@ INSERT INTO Roles (name)
 VALUES ('Professeurs'),
 ('Secrétariat');
 
+INSERT INTO SchoolClasses (name, studentsnumber)
+VALUES ('SI-T2a', 7),
+('SI-T2b', 5),
+('SI-T1a', 12),
+('SI-T1b', 10),
+('SI-C2a', 20),
+('SI-C3b', 18),
+('SI-C4a', 13),
+('SI-C4b', 17);
+
 INSERT INTO Years (title, [open])
 VALUES (2016, 0),
 (2017, 0),
@@ -34,3 +44,14 @@ VALUES (0, 1, 2, 1),
 (0, 3, 1, 5),
 (0, 3, 1, 6),
 (1, 3, 1, 7);
+
+INSERT INTO SchoolClasses_Requests (FK_SchoolClasses, FK_Requests)
+VALUES (1, 7),
+(2, 7),
+(3, 7),
+(4, 7),
+(1, 5),
+(2, 5),
+(4, 4),
+(5, 5),
+(6, 5);
