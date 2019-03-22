@@ -14,24 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="FkYears" class="control-label"></label>
-                <select asp-for="FkYears" class="form-control" asp-items="ViewBag.FKYears"></select>
-                <span asp-validation-for="FkYears" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Approved" class="control-label"></label>
-                <input asp-for="Approved" class="form-control" />
-                <span asp-validation-for="Approved" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FkUsers" class="control-label"></label>
-                <select asp-for="FkUsers" class="form-control" asp-items="ViewBag.FkUsers"></select>
-                <span asp-validation-for="FkUsers" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FkBooks" class="control-label"></label>
-                <select asp-for="FkBooks" class="form-control" asp-items="ViewBag.FkBooks"></select>
-                <span asp-validation-for="FkBooks" class="text-danger"></span>
+                <label asp-for="SchoolClassesRequests" class="control-label"></label>
+                <select asp-for="SchoolClassesRequests" class="form-control" asp-items="ViewBag.SchoolClassesRequests"></select>
+                <span asp-validation-for="SchoolClassesRequests" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
