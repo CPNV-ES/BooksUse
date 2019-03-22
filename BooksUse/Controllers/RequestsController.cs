@@ -123,7 +123,7 @@ namespace BooksUse.Models
         // GET: Requests/Create
         public async Task<IActionResult> Create()
         {
-            ViewData["SchoolClassesRequests"] = new SelectList(_context.SchoolClasses, "Id", "Name");
+            ViewData["SchoolClasses"] = new SelectList(_context.SchoolClasses, "Id", "Name");
 
             if (StartController._currentUser.FkRoles == 1)
             {
@@ -157,7 +157,7 @@ namespace BooksUse.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchoolClassesRequests", "FkYears", "FkBooks", "FkUsers")] Requests requests)
+        public async Task<IActionResult> Create([Bind("SchoolClasses", "FkYears", "FkBooks", "FkUsers")] Requests requests)
         {
             requests.FkYears = StartController._currentYear.Id;
             requests.Approved = 1;
@@ -195,12 +195,21 @@ namespace BooksUse.Models
             }
 
             var requests = await _context.Requests.FindAsync(id);
+
             if (requests == null)
             {
                 return NotFound();
             }
-            ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Author", requests.FkBooks);
-            ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName", requests.FkUsers);
+            ViewData["SchoolClassesRequests"] = new SelectList(_context.SchoolClassesRequests, "Id", "FkSchoolClassesNavigation", requests.SchoolClassesRequests);
+
+            ViewData["SchoolClassesRequests"] = from u in _context.SchoolClassesRequests
+                                  select new SelectListItem
+                                  {
+                                      Value = u.FkSchoolClassesNavigation.Id.ToString(),
+                                      Text = u.FkSchoolClassesNavigation.Name
+                                  };
+            //ViewData["SchoolClasses"] = new SelectList(_context.SchoolClasses, "Id", "Name", requests.SchoolClassesRequests);
+            //ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName", requests.FkUsers);
             return View(requests);
         }
 
@@ -209,7 +218,7 @@ namespace BooksUse.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ForYear,Approved,FkUsers,FkBooks")] Requests requests)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ForYear,Approved,FkUsers,FkBooks,SchoolClassesRequests")] Requests requests)
         {
             if (id != requests.Id)
             {
