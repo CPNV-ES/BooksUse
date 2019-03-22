@@ -39,4 +39,9 @@
     </EmbeddedResource>
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Models\Partials\" />
+  </ItemGroup>
+
 </Project>
