@@ -31,7 +31,13 @@ namespace BooksUse.Models
         {
             StartController._currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
 
-            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r == r);
+            var booksUseContext = _context.Requests
+                .Include(r => r.FkBooksNavigation)
+                .Include(r => r.FkUsersNavigation)
+                .Include(r => r.FkYearsNavigation)
+                .Include(r => r.SchoolClassesRequests)
+                .ThenInclude( s => s.FkSchoolClassesNavigation)
+                .Where(r => r == r);
 
             if (StartController._currentYear != null)
             {
@@ -53,7 +59,13 @@ namespace BooksUse.Models
         {
             StartController._currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
 
-            var booksUseContext = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYearsNavigation.Open == true);
+            var booksUseContext = _context.Requests
+                .Include(r => r.FkBooksNavigation)
+                .Include(r => r.FkUsersNavigation)
+                .Include(r => r.FkYearsNavigation)
+                .Include(r => r.SchoolClassesRequests)
+                .ThenInclude(s => s.FkSchoolClassesNavigation)
+                .Where(r => r.FkYearsNavigation.Open == true);
 
             if (StartController._currentYear == null)
             {
@@ -97,6 +109,8 @@ namespace BooksUse.Models
                 .Include(r => r.FkBooksNavigation)
                 .Include(r => r.FkUsersNavigation)
                 .Include(r => r.FkYearsNavigation)
+                .Include(r => r.SchoolClassesRequests)
+                .ThenInclude(s => s.FkSchoolClassesNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (requests == null)
             {
@@ -109,10 +123,7 @@ namespace BooksUse.Models
         // GET: Requests/Create
         public async Task<IActionResult> Create()
         {
-            
-            //ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName");
-
-            
+            ViewData["SchoolClassesRequests"] = new SelectList(_context.SchoolClasses, "Id", "Name");
 
             if (StartController._currentUser.FkRoles == 1)
             {
@@ -122,6 +133,7 @@ namespace BooksUse.Models
                 var books = await _context.Books.Where(r => Array.IndexOf(idBooks, r.Id) == -1).ToListAsync();
 
                 ViewData["FkBooks"] = new SelectList(books, "Id", "Title");
+                
                 return View("createTeachers");
             }
             else
@@ -145,7 +157,7 @@ namespace BooksUse.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FkYears", "FkBooks", "FkUsers")] Requests requests)
+        public async Task<IActionResult> Create([Bind("SchoolClassesRequests", "FkYears", "FkBooks", "FkUsers")] Requests requests)
         {
             requests.FkYears = StartController._currentYear.Id;
             requests.Approved = 1;
@@ -241,6 +253,8 @@ namespace BooksUse.Models
                 .Include(r => r.FkBooksNavigation)
                 .Include(r => r.FkUsersNavigation)
                 .Include(r => r.FkYearsNavigation)
+                .Include(r => r.SchoolClassesRequests)
+                .ThenInclude(s => s.FkSchoolClassesNavigation)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (requests == null)
             {
