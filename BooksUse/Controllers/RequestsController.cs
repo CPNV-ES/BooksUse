@@ -169,33 +169,38 @@ namespace BooksUse.Models
         [HttpPost]
         public async Task<IActionResult> Create([Bind("Id,ForYear,Approved,FkUsers,FkBooks,SchoolClassesRequests")] Requests requests)
         {
-            requests.FkYears = StartController._currentYear.Id;
-            requests.Approved = 1;
-
-            if (requests.FkUsers != 0)
+            if (ModelState.IsValid)
             {
-                requests.FkUsers = requests.FkUsers;
-            }
-            else
-            {
-                requests.FkUsers = StartController._currentUser.Id;
-            }
+                requests.FkYears = StartController._currentYear.Id;
+                requests.Approved = 1;
 
-            _context.Add(requests);
-            await _context.SaveChangesAsync();
+                if (requests.FkUsers != 0)
+                {
+                    requests.FkUsers = requests.FkUsers;
+                }
+                else
+                {
+                    requests.FkUsers = StartController._currentUser.Id;
+                }
 
-
-
-            var schoolClassesIds = Request.Form["SchoolClassesRequests"];
-
-            foreach(string schoolClassesId in schoolClassesIds)
-            {
-                SchoolClassesRequests schoolClassesRequest = new SchoolClassesRequests { FkRequests = requests.Id, FkSchoolClasses = Int32.Parse(schoolClassesId) };
-                _context.Add(schoolClassesRequest);
+                _context.Add(requests);
                 await _context.SaveChangesAsync();
+
+
+
+                var schoolClassesIds = Request.Form["SchoolClassesRequests"];
+
+                foreach (string schoolClassesId in schoolClassesIds)
+                {
+                    SchoolClassesRequests schoolClassesRequest = new SchoolClassesRequests { FkRequests = requests.Id, FkSchoolClasses = Int32.Parse(schoolClassesId) };
+                    _context.Add(schoolClassesRequest);
+                    await _context.SaveChangesAsync();
+                }
+
+                return RedirectToAction(nameof(Index));
             }
-          
-            return RedirectToAction(nameof(Index));
+            return View(requests);
+            
         }
 
         // GET: Requests/Edit/5
@@ -212,7 +217,6 @@ namespace BooksUse.Models
             {
                 return NotFound();
             }
-            ViewData["SchoolClassesRequests"] = new SelectList(_context.SchoolClassesRequests, "Id", "FkSchoolClassesNavigation", requests.SchoolClassesRequests);
 
             ViewData["SchoolClassesRequests"] = from u in _context.SchoolClassesRequests
                                   select new SelectListItem
@@ -220,8 +224,7 @@ namespace BooksUse.Models
                                       Value = u.FkSchoolClassesNavigation.Id.ToString(),
                                       Text = u.FkSchoolClassesNavigation.Name
                                   };
-            //ViewData["SchoolClasses"] = new SelectList(_context.SchoolClasses, "Id", "Name", requests.SchoolClassesRequests);
-            //ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName", requests.FkUsers);
+
             return View(requests);
         }
 
@@ -257,8 +260,12 @@ namespace BooksUse.Models
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Author", requests.FkBooks);
-            ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName", requests.FkUsers);
+            ViewData["SchoolClassesRequests"] = from u in _context.SchoolClassesRequests
+                                                select new SelectListItem
+                                                {
+                                                    Value = u.FkSchoolClassesNavigation.Id.ToString(),
+                                                    Text = u.FkSchoolClassesNavigation.Name
+                                                };
             return View(requests);
         }
 

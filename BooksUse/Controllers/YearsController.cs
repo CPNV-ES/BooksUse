@@ -65,32 +65,28 @@ namespace BooksUse.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Title,Open")] Years years)
         {
-            var allYears = _context.Years;
-            foreach (var year in allYears)
-            {
-                year.Open = false;
-                _context.Update(year);
-            }
-            await _context.SaveChangesAsync();
-
-            var lastYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync();
-            var requests = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == lastYear.Id && r.Approved == 1);
-
-            var newYear = new Years { Open = true, Title = lastYear.Title + 1 };
-            _context.Add(newYear);
-            await _context.SaveChangesAsync();
-
-            foreach (var el in requests)
-            {
-                var newEl = new Requests { Approved = 0, FkBooks = el.FkBooks, FkUsers = el.FkUsers, FkYears = newYear.Id };
-                _context.Add(newEl);
-            }
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-
             if (ModelState.IsValid)
             {
-                _context.Add(years);
+                var allYears = _context.Years;
+                foreach (var year in allYears)
+                {
+                    year.Open = false;
+                    _context.Update(year);
+                }
+                await _context.SaveChangesAsync();
+
+                var lastYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync();
+                var requests = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == lastYear.Id && r.Approved == 1);
+
+                var newYear = new Years { Open = true, Title = lastYear.Title + 1 };
+                _context.Add(newYear);
+                await _context.SaveChangesAsync();
+
+                foreach (var el in requests)
+                {
+                    var newEl = new Requests { Approved = 0, FkBooks = el.FkBooks, FkUsers = el.FkUsers, FkYears = newYear.Id };
+                    _context.Add(newEl);
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -111,27 +107,6 @@ namespace BooksUse.Controllers
                 return NotFound();
             }
             return View(years);
-        }
-
-        public async Task<IActionResult> Close(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var years = await _context.Years.FindAsync(id);
-            if (years == null)
-            {
-                return NotFound();
-            }
-
-            years.Open = false;
-            _context.Update(years);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-
-
         }
 
         // POST: Years/Edit/5
@@ -167,6 +142,28 @@ namespace BooksUse.Controllers
                 return RedirectToAction(nameof(Index));
             }
             return View(years);
+        }
+
+
+        public async Task<IActionResult> Close(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var years = await _context.Years.FindAsync(id);
+            if (years == null)
+            {
+                return NotFound();
+            }
+
+            years.Open = false;
+            _context.Update(years);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+
+
         }
 
         // GET: Years/Delete/5
