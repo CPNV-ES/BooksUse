@@ -1,0 +1,32 @@
+﻿@model BooksUse.Models.SchoolClasses
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<h4>Etes-vous sur de vouloir supprimer cette classe ?</h4>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            Nom
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            Nombre d'étudiants
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Studentsnumber)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Suprimmer" class="btn btn-danger" /> |
+        <a asp-action="Index">Retour</a>
+    </form>
+</div>
