@@ -10,31 +10,31 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            Livre
+            @Html.DisplayNameFor(model => model.FkBooksNavigation)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FkBooksNavigation.Title)
         </dd>
         <dt class="col-sm-2">
-            Demandeur
+            @Html.DisplayNameFor(model => model.FkUsersNavigation)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FkUsersNavigation.FirstName) @Html.DisplayFor(model => model.FkUsersNavigation.LastName)
         </dd>
         <dt class="col-sm-2">
-            Approuvé
+            @Html.DisplayNameFor(model => model.Approved)
         </dt>
         <dd class="col-sm-10">
             @((Model.Approved == 1) ? "Oui" : "Non")
         </dd>
         <dt class="col-sm-2">
-            Année
+            @Html.DisplayNameFor(model => model.FkYearsNavigation)
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.FkYearsNavigation.Title)
         </dd>
         <dt class="col-sm-2">
-            Classe(s)
+            @Html.DisplayNameFor(model => model.SchoolClassesRequests)
         </dt>
         <dd class="col-sm-10">
             <br />
