@@ -68,11 +68,7 @@ namespace BooksUse.Controllers
                 await _context.SaveChangesAsync();
                 if(StartController._currentUser.FkRoles == 1)
                 {
-                    var currentYear = await _context.Years.Where(r => r.Open == true).OrderByDescending(r => r.Title).FirstOrDefaultAsync();
-                    var requests = new Requests { Approved = 1, FkBooks = books.Id, FkUsers = StartController._currentUser.Id, FkYears = currentYear.Id };
-                    _context.Add(requests);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Index", "Requests");
+                    return RedirectToAction("Create", "Requests", new { booksId = books.Id });
                 }
                 return RedirectToAction(nameof(Index));
             }
