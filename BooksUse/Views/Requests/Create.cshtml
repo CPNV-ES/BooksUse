@@ -8,7 +8,7 @@
 <br />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Create" id="createForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="FkUsers" class="control-label">Professeur</label>
@@ -20,7 +20,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="SchoolClassesRequests" class="control-label">Classe(s)</label>
-                <select id="schoolClassesSelect" SelectionMode="Multiple" asp-for="SchoolClassesRequests" class="form-control" asp-items="ViewBag.SchoolClasses"></select>
+                <select id="schoolClassesSelect" multiple="multiple" SelectionMode="Multiple" asp-for="SchoolClassesRequests" class="form-control" asp-items="ViewBag.SchoolClasses"></select>
+                <small class="form-text text-muted">Pour selectionner plusieurs classes utiliser la touche Ctrl+clic gauche</small>
             </div>
             <div class="form-group">
                 <input id="submitButton" type="submit" value="Ajouter" class="btn btn-primary" />

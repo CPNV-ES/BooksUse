@@ -1,42 +1,53 @@
 ﻿@model BooksUse.Models.Requests
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Detailsnew";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
-
 <div>
-    <h4>Requests</h4>
+    <h4>Details</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FkYearsNavigation)
+        <dt class="col-sm-2">
+            Livre
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FkYearsNavigation)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FkBooksNavigation.Title)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Approved)
+        <dt class="col-sm-2">
+            Demandeur
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Approved)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FkUsersNavigation.FirstName) @Html.DisplayFor(model => model.FkUsersNavigation.LastName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FkBooksNavigation)
+        <dt class="col-sm-2">
+            Approuvé
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FkBooksNavigation.Author)
+        <dd class="col-sm-10">
+            @((Model.Approved == 1) ? "Oui" : "Non")
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FkUsersNavigation)
+        <dt class="col-sm-2">
+            Année
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FkUsersNavigation.FirstName)
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FkYearsNavigation.Title)
         </dd>
+        <dt class="col-sm-2">
+            Classe(s)
+        </dt>
+        <dd class="col-sm-10">
+            <br />
+            <ul>
+            @foreach (SchoolClassesRequests item in Model.SchoolClassesRequests)
+            {
+               <li>@item.FkSchoolClassesNavigation.Name</li>
+            }
+            </ul>
+</dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
+    <a asp-action="Index">Retour</a>
 </div>

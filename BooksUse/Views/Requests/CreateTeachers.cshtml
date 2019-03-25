@@ -18,10 +18,15 @@
                 <a asp-controller="Books" asp-action="Create" class="btn btn-outline-primary">Mon livre n'existe pas</a>
             </div>
             <div class="form-group">
+                <label asp-for="SchoolClassesRequests" class="control-label">Classe(s)</label>
+                <select id="schoolClassesSelect" multiple="multiple" SelectionMode="Multiple" asp-for="SchoolClassesRequests" class="form-control" asp-items="ViewBag.SchoolClasses"></select>
+                <small class="form-text text-muted">Pour selectionner plusieurs classes utiliser la touche Ctrl+clic gauche</small>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Ajouter" class="btn btn-outline-success" />
             </div>
             <div class="form-group">
-                
+
             </div>
         </form>
     </div>
