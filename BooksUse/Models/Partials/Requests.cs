@@ -16,10 +16,13 @@ namespace BooksUse.Models
     {
         [DisplayName("Approuvé")]
         public int Approved { get; set; }
+
         [DisplayName("Année")]
         public int FkYears { get; set; }
+
         [DisplayName("Demandeur")]
         public int FkUsers { get; set; }
+
         [DisplayName("Livre")]
         public int FkBooks { get; set; }
 
