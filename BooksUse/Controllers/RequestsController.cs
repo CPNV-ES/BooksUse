@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BooksUse.Controllers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -121,7 +122,7 @@ namespace BooksUse.Models
         }
 
         // GET: Requests/Create
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int booksId = -1)
         {
             ViewData["SchoolClasses"] = new SelectList(_context.SchoolClasses, "Id", "Name");
 
@@ -132,8 +133,17 @@ namespace BooksUse.Models
 
                 var books = await _context.Books.Where(r => Array.IndexOf(idBooks, r.Id) == -1).ToListAsync();
 
-                ViewData["FkBooks"] = new SelectList(books, "Id", "Title");
-                
+                if(booksId != -1)
+                {
+                    ViewData["FkBooks"] = new SelectList(books, "Id", "Title", booksId);
+                }
+                else
+                {
+                    ViewData["FkBooks"] = new SelectList(books, "Id", "Title");
+                }
+
+
+
                 return View("createTeachers");
             }
             else
@@ -152,12 +162,12 @@ namespace BooksUse.Models
             
         }
 
+
         // POST: Requests/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SchoolClasses", "FkYears", "FkBooks", "FkUsers")] Requests requests)
+        public async Task<IActionResult> Create([Bind("Id,ForYear,Approved,FkUsers,FkBooks,SchoolClassesRequests")] Requests requests)
         {
             requests.FkYears = StartController._currentYear.Id;
             requests.Approved = 1;
@@ -173,17 +183,19 @@ namespace BooksUse.Models
 
             _context.Add(requests);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
 
-            //if (ModelState.IsValid)
-            //{
-            //    _context.Add(requests);
-            //    await _context.SaveChangesAsync();
-            //    return RedirectToAction(nameof(Index));
-            //}
-            ////ViewData["FkBooks"] = new SelectList(_context.Books, "Id", "Author", requests.FkBooks);
-            ////ViewData["FkUsers"] = new SelectList(_context.Users, "Id", "FirstName", requests.FkUsers);
-            //return View(requests);
+
+
+            var schoolClassesIds = Request.Form["SchoolClassesRequests"];
+
+            foreach(string schoolClassesId in schoolClassesIds)
+            {
+                SchoolClassesRequests schoolClassesRequest = new SchoolClassesRequests { FkRequests = requests.Id, FkSchoolClasses = Int32.Parse(schoolClassesId) };
+                _context.Add(schoolClassesRequest);
+                await _context.SaveChangesAsync();
+            }
+          
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Requests/Edit/5
@@ -278,6 +290,15 @@ namespace BooksUse.Models
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
+            var scr = await _context.SchoolClassesRequests.Where(r => r.FkRequests == id).ToListAsync();
+            foreach(SchoolClassesRequests el in scr)
+            {
+                _context.Remove(el);
+            }
+            
+            await _context.SaveChangesAsync();
+
             var requests = await _context.Requests.FindAsync(id);
             _context.Requests.Remove(requests);
             await _context.SaveChangesAsync();
