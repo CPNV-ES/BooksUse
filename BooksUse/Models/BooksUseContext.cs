@@ -39,7 +39,7 @@ namespace BooksUse.Models
             modelBuilder.Entity<Books>(entity =>
             {
                 entity.HasIndex(e => e.Isbn)
-                    .HasName("UQ__Books__447D36EA794D8128")
+                    .HasName("UQ__Books__447D36EA2E2A4ECB")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -56,9 +56,7 @@ namespace BooksUse.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Price)
-                    .HasColumnName("price")
-                    .HasColumnType("decimal(6, 2)");
+                entity.Property(e => e.Price).HasColumnName("price");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -150,19 +148,19 @@ namespace BooksUse.Models
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasIndex(e => e.Email)
-                    .HasName("UQ__Users__AB6E61645E4DF7BE")
+                    .HasName("UQ__Users__AB6E6164F63DBAF8")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Initials)
-                    .HasName("UQ__Users__696DB02C7B886387")
+                    .HasName("UQ__Users__696DB02C8C6DC163")
                     .IsUnique();
 
                 entity.HasIndex(e => e.IntranetUserId)
-                    .HasName("UQ__Users__C5DF48D80801DA1A")
+                    .HasName("UQ__Users__C5DF48D84168C926")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Phone)
-                    .HasName("UQ__Users__B43B145FA8CF4C14")
+                    .HasName("UQ__Users__B43B145FD07DDF44")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
