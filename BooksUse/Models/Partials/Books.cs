@@ -36,9 +36,9 @@ namespace BooksUse.Models
         public int? UnitsInStock { get; set; }
 
         [Required(ErrorMessage = "Le champ Prix est requis")]
-        [Range(0, 999)]
-        [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Prix invalide")]
+        [RegularExpression(@"^\d{0,3}(\.\d{0,2})?$", ErrorMessage = "Le champ Prix n'est pas valide")]
+        [Range(0.01, 999.99, ErrorMessage = "Le champ Prix doit être compris de 0.01 à 999.99")]
         [DisplayName("Prix")]
-        public decimal? Price { get; set; }
+        public decimal Price { get; set; }
     }
 }
