@@ -1,37 +1,24 @@
-﻿$(document).ready(function () {
-    $(document).on('click', '.submitBooksButton', function (event) {
-        event.preventDefault()
-        let error = false
+﻿document.addEventListener('DOMContentLoaded', function () {
+    $('.check').on('input', function () {
+        value = $(this).val()
+        id = $(this).attr('id')
+        
 
-        $("#title").removeClass("is-invalid")
-        $("#isbn").removeClass("is-invalid")
-        $("#author").removeClass("is-invalid")
-        $("#stock").removeClass("is-invalid")
-        $("#price").removeClass("is-invalid")
-
-
-        if ($("#title").val() == "") {
-            $("#title").addClass("is-invalid")
-            error = true
-        }
-        if ($("#isbn").val() == "") {
-            $("#isbn").addClass("is-invalid")
-            error = true
-        }
-        if ($("#author").val() == "") {
-            $("#author").addClass("is-invalid")
-            error = true
-        }
-        if ($("#stock").val() == "") {
-            $("#stock").addClass("is-invalid")
-            error = true
-        }
-        if ($("#price").val() == "") {
-            $("#price").addClass("is-invalid")
-            error = true
-        }
-        if (!error) {
-            document.getElementById("form").submit();
-        }
+        //api/BooksAPI/Exist/field/value
+        if (value.length > 0) {
+            $.get(`/api/BooksAPI/Exist/${id}/${value}`, function (data) {
+                if (data == true) {
+                    document.getElementById(id).classList.add("is-invalid")
+                    $('.submitBooksButton').prop('disabled', true)
+                }
+                else if (data == false) {
+                    document.getElementById(id).classList.remove("is-invalid")
+                    $('.submitBooksButton').prop('disabled', false)
+                }
+                else {
+                    console.log(data)
+                }
+            })
+        }        
     })
 })
