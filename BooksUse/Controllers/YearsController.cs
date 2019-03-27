@@ -19,10 +19,11 @@ namespace BooksUse.Controllers
             _context = context;
         }
 
-
+        // Before loading any page
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ViewBag.user = StartController._currentUser; //Add whatever
+            // Update current year
+            ViewBag.user = StartController._currentUser;
             base.OnActionExecuting(filterContext);
         }
 
@@ -67,7 +68,10 @@ namespace BooksUse.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Get all years
                 var allYears = _context.Years;
+
+                // Close each year
                 foreach (var year in allYears)
                 {
                     year.Open = false;
@@ -75,13 +79,18 @@ namespace BooksUse.Controllers
                 }
                 await _context.SaveChangesAsync();
 
+                // Get last year
                 var lastYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync();
+
+                // Get all requestd of lastyear
                 var requests = _context.Requests.Include(r => r.FkBooksNavigation).Include(r => r.FkUsersNavigation).Include(r => r.FkYearsNavigation).Where(r => r.FkYears == lastYear.Id && r.Approved == 1);
 
+                // Create new year
                 var newYear = new Years { Open = true, Title = lastYear.Title + 1 };
                 _context.Add(newYear);
                 await _context.SaveChangesAsync();
 
+                // for each approved request in last year, recreate for new year
                 foreach (var el in requests)
                 {
                     var newEl = new Requests { Approved = 0, FkBooks = el.FkBooks, FkUsers = el.FkUsers, FkYears = newYear.Id };

@@ -19,9 +19,10 @@ namespace BooksUse.Controllers
             _context = context;
         }
 
+        // Before loading any page
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            ViewBag.user = StartController._currentUser; //Add whatever
+            ViewBag.user = StartController._currentUser; //Put user in viewbag
             base.OnActionExecuting(filterContext);
         }
 
@@ -66,6 +67,8 @@ namespace BooksUse.Controllers
             {
                 _context.Add(books);
                 await _context.SaveChangesAsync();
+
+                // if it's teacher redirect to request create with the new book
                 if(StartController._currentUser.FkRoles == 1)
                 {
                     return RedirectToAction("Create", "Requests", new { booksId = books.Id });

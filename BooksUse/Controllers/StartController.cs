@@ -11,6 +11,7 @@ namespace BooksUse.Controllers
     public class StartController : Controller
     {
         private readonly BooksUseContext _context;
+        // Static var for application
         public static Users _currentUser;
         public static Years _currentYear;
 
@@ -24,6 +25,7 @@ namespace BooksUse.Controllers
 
             await setStaticVariables();
 
+            // Check roles and open the right page
             if(_currentUser.FkRoles == 1)
             {
                 return RedirectToAction("Index", "Requests");
@@ -41,7 +43,10 @@ namespace BooksUse.Controllers
 
         public async Task setStaticVariables()
         {
+            // Get current user
             _currentUser = await _context.Users.FirstOrDefaultAsync(r => r.IntranetUserId == config.intranetId);
+
+            // Get current year
             _currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
         }
     }

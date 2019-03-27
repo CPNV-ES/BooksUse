@@ -19,9 +19,13 @@ namespace BooksUse.Controllers
             _context = context;
         }
 
+        // Before loading any page
         public override async void OnActionExecuting(ActionExecutingContext filterContext)
         {
+            // Update current year
             StartController._currentYear = await _context.Years.OrderByDescending(r => r.Title).FirstOrDefaultAsync(r => r.Open == true);
+
+            // Set user in viewbag
             ViewBag.user = StartController._currentUser; //Add whatever
             base.OnActionExecuting(filterContext);
         }
@@ -146,6 +150,7 @@ namespace BooksUse.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Delete all link in SchoolClassesRequests
             var scr = await _context.SchoolClassesRequests.Where(r => r.FkSchoolClasses == id).ToListAsync();
             foreach (SchoolClassesRequests el in scr)
             {

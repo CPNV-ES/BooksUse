@@ -31,9 +31,13 @@ namespace BooksUse.Controllers
         [HttpGet("GetAvaibleBooks/{userid}")]
         public async Task<ActionResult<List<Books>>> GetAvaibleBooks(int userid)
         {
+            // Get reuquest of userID
             var requests = await _context.Requests.Where(r => r.FkUsers == userid).ToListAsync();
+
+            // Get all books id of request
             var idBooks = requests.Select(b => b.FkBooks).ToArray();
 
+            // Get all avaible books for user
             var books = await _context.Books.Where(r => Array.IndexOf(idBooks, r.Id) == -1).ToListAsync();
 
             if (books == null)
@@ -52,9 +56,11 @@ namespace BooksUse.Controllers
             switch(field)
             {
                 case "title":
+                    // Get first value if exist
                     book = await _context.Books.Where(r => r.Title == value).FirstOrDefaultAsync();
                     break;
                 case "isbn":
+                    // Get first value if exist
                     book = await _context.Books.Where(r => r.Isbn == value).FirstOrDefaultAsync();
                     break;
                 default:
