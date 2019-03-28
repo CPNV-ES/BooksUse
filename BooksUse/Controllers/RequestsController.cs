@@ -246,12 +246,26 @@ namespace BooksUse.Models
                 return NotFound();
             }
 
-            ViewData["SchoolClassesRequests"] = from u in _context.SchoolClassesRequests
-                                  select new SelectListItem
-                                  {
-                                      Value = u.FkSchoolClassesNavigation.Id.ToString(),
-                                      Text = u.FkSchoolClassesNavigation.Name
-                                  };
+            // Get the user of request
+            var requestUser = _context.Users.Where(r => r.Id == requests.FkUsers).FirstOrDefault();
+
+            // Give the Fullname of the user
+            ViewData["FkUsers"] = requestUser.FirstName + " " + requestUser.LastName;
+
+            // Give the book of the request
+            ViewData["FkBooks"] = _context.Books.Where(r => r.Id == requests.FkBooks).FirstOrDefault().Title;
+
+            // Get all ids of schoolClassesRequests where the FKrequest is equals of current request
+            var schoolClassesRquestsIds = _context.SchoolClassesRequests.Where(r => r.FkRequests == id).ToArray().Select(s => s.FkSchoolClasses).ToArray();
+
+            // Get the schoolClasses where are contain in schoolClassesRquestsIds
+            var selectedSchoolClasses = _context.SchoolClasses.Where(r => schoolClassesRquestsIds.Contains(r.Id)).ToList();
+
+            // Give all SchoolClasses
+            ViewData["SchoolClasses"] = _context.SchoolClasses;
+
+            // Give SchoolClasses of current request
+            ViewData["SelectedSchoolClasses"] = selectedSchoolClasses;
 
             return View(requests);
         }
@@ -261,7 +275,7 @@ namespace BooksUse.Models
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ForYear,Approved,FkUsers,FkBooks,SchoolClassesRequests")] Requests requests)
+        public async Task<IActionResult> Edit(int id, [Bind("Id")] Requests requests)
         {
             if (id != requests.Id)
             {
@@ -272,8 +286,40 @@ namespace BooksUse.Models
             {
                 try
                 {
-                    _context.Update(requests);
-                    await _context.SaveChangesAsync();
+                    // get the id of selected classes
+                    var schoolClassesIds = Request.Form["SchoolClassesRequests"];
+
+                    // get old school classes
+                    var oldSchoolClasses = _context.SchoolClassesRequests.Where(r => r.FkRequests == requests.Id).ToList().Select(s => s.FkSchoolClasses.ToString()).ToArray();
+
+                    // get delete school classes
+                    foreach (string el in oldSchoolClasses)
+                    {
+                        if (!schoolClassesIds.Contains(el))
+                        {
+                            // Get element to delete it
+                            var delEl = _context.SchoolClassesRequests.Where(r => r.FkRequests == requests.Id && r.FkSchoolClasses == Int32.Parse(el)).First();
+
+                            // Delete in database
+                            _context.Remove(delEl);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    
+
+                    // For each id create a schoolclassesrequestd
+                    foreach (string schoolClassesId in schoolClassesIds)
+                    {
+                        var alreadyExistItem = _context.SchoolClassesRequests.Where(r => r.FkRequests == requests.Id && r.FkSchoolClasses == Int32.Parse(schoolClassesId)).FirstOrDefault();
+
+                        if (alreadyExistItem == null)
+                        {
+                            // create an object with parameters
+                            SchoolClassesRequests schoolClassesRequest = new SchoolClassesRequests { FkRequests = requests.Id, FkSchoolClasses = Int32.Parse(schoolClassesId) };
+                            _context.Add(schoolClassesRequest);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -288,12 +334,6 @@ namespace BooksUse.Models
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SchoolClassesRequests"] = from u in _context.SchoolClassesRequests
-                                                select new SelectListItem
-                                                {
-                                                    Value = u.FkSchoolClassesNavigation.Id.ToString(),
-                                                    Text = u.FkSchoolClassesNavigation.Name
-                                                };
             return View(requests);
         }
 
