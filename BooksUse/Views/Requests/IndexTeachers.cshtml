@@ -41,6 +41,7 @@
                         }
                     </td>
                     <td class="text-center">
+                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="mdi mdi-pencil text-primary" style="font-size: 20px;"></i></a>
                         <a asp-action="Delete" asp-route-id="@item.Id"><i class="mdi mdi-delete text-danger" style="font-size: 20px;"></i></a>
                     </td>
                 </tr>
