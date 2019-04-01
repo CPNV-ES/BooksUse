@@ -16,12 +16,12 @@ namespace BooksUse.Models
     public class BooksMetadata
     {
         [Required(ErrorMessage = "Le champ Titre est requis")]
-        [StringLength(254)]
+        [StringLength(154)]
         [DisplayName("Titre")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Le champ ISBN est requis")]
-        [StringLength(15)]
+        [StringLength(20, MinimumLength = 3, ErrorMessage = "Le champ ISBN doit contenir entre 3 et 16 caractères")]
         [DisplayName("ISBN")]
         public string Isbn { get; set; }
 

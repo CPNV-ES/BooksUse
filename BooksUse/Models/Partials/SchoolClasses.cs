@@ -16,12 +16,12 @@ namespace BooksUse.Models
     public class SchoolClassesMetadata
     {
         [Required(ErrorMessage = "Le champ Nom est requis")]
-        [StringLength(20)]
+        [StringLength(20, ErrorMessage = "Le nom de classe doit contenir au maximum 20 caractères")]
         [DisplayName("Nom")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Le champ Nombre d'étudiants est requis")]
-        [Range(1, 100)]
+        [Range(1, 100, ErrorMessage = "Le nombre d'étudiants doit être compris entre 1 et 100")]
         [DisplayName("Nombre d'étudiants")]
         public int Studentsnumber { get; set; }
     }
