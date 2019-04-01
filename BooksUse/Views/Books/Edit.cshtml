@@ -8,7 +8,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit">
+        <form id="form" asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
@@ -37,7 +37,7 @@
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Sauvegarder" class="btn btn-primary submitBooksButton" />
+                <input id="submitButton" type="submit" value="Sauvegarder" class="btn btn-primary submitBooksButton"/>
             </div>
         </form>
     </div>
@@ -47,8 +47,10 @@
     <a asp-action="Index">Retour</a>
 </div>
 
-<script type="text/javascript" src='/js/books.min.js'></script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+@*<script type="text/javascript" src='/js/books.min.js'></script>*@
+<script type="text/javascript" src='/js/validateForm.min.js'></script>
