@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BooksUse.Models;
@@ -11,7 +10,7 @@ namespace BooksUse.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BooksAPIController : ControllerBase
+    public class BooksAPIController : Controller
     {
         private readonly BooksUseContext _context;
 
