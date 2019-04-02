@@ -6,11 +6,14 @@ VALUES ('Business Result second edition Pre-intermediate', '425-0-19-473886-5', 
 ('Business Result first edition Pre-intermediate', '978-0-19-245874-9', 'David Grant, John Hughes & Jon Naunton', 25, 40),
 ('Business Result second edition Intermediate', '333-5-20-247325-6', 'John Hughes & Jon Naunton', 0, 42),
 ('Business Result first edition Intermediate', '176-0-98-241212-8', 'John Hughes & Jon Naunton', 3, 39),
+('Formulaires et tables', '978-2-940501-41-0', 'Commissions romandes de mathématique', 54, 15),
+('Physique', '978-2-10-007-169-2', 'Joseph Kane & Morton Sternheim', 13, 85),
 ('Book 3', '754-0-42-698591-6', 'Author 2 & Author 4', 20, 10),
 ('Book 4', '358-0-58-587784-6', 'Author 4', 1, 90),
 ('Book 5', '844-0-55-985785-6', 'Author 4, Author 5 & Author 6', 8, 15.40),
 ('Book 6', '245-0-44-365986-6', 'Author 1', 2, 4.50),
-('Book 7', '984-0-57-245551-6', 'AUthor 34', 80, 120);
+('Book 7', '984-0-57-245551-6', 'AUthor 34', 80, 120),
+('Book 8', '542-0-42-142842-6', 'Author 45', 1, 9.90);
 
 INSERT INTO Roles (name)
 VALUES ('Professeurs'),
@@ -42,8 +45,16 @@ VALUES (0, 1, 2, 1),
 (1, 2, 2, 3),
 (1, 2, 2, 4),
 (0, 3, 1, 5),
-(0, 3, 1, 6),
-(1, 3, 1, 7);
+(1, 3, 1, 6),
+(0, 3, 1, 7),
+(0, 3, 1, 8),
+(1, 3, 1, 9),
+(0, 3, 1, 10),
+(0, 3, 1, 4),
+(0, 3, 1, 4),
+(1, 3, 2, 6),
+(0, 3, 2, 5),
+(1, 3, 2, 4);
 
 INSERT INTO SchoolClasses_Requests (FK_SchoolClasses, FK_Requests)
 VALUES (1, 7),
