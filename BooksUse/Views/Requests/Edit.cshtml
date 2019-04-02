@@ -1,0 +1,53 @@
+﻿@model BooksUse.Models.Requests
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h4>Edition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="FkBooks" class="control-label"></label>
+                <input value="@ViewData["FkBooks"]" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <label asp-for="FkUsers" class="control-label"></label>
+                <input value="@ViewData["FkUsers"]" class="form-control" readonly>
+            </div>
+            <div class="form-group">
+                <label asp-for="SchoolClassesRequests" class="control-label">Classe(s)</label>
+                <select asp-for="SchoolClassesRequests" class="form-control">
+                    @foreach (SchoolClasses scr in ViewBag.SchoolClasses)
+                    {
+                        if (ViewBag.SelectedSchoolClasses.Contains(scr))
+                        {
+                            <option value="@scr.Id" selected>@scr.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@scr.Id">@scr.Name</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="SchoolClassesRequests" class="text-danger"></span>
+                <small class="form-text text-muted">Pour selectionner ou deselctionner une classe, utiliser la touche Ctrl+clic gauche</small>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Sauver" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retour</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,41 @@
+[
+  //{
+  //  "outputFileName": "wwwroot/css/site.min.css",
+  //  "inputFiles": [
+  //    "wwwroot/css/site.css"
+  //  ]
+  //},
+  {
+    "outputFileName": "wwwroot/js/books.min.js",
+    "inputFiles": [
+      "Javascript/books.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/userSelect.min.js",
+    "inputFiles": [
+      "Javascript/userSelect.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/js/validateForm.min.js",
+    "inputFiles": [
+      "Javascript/validateForm.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

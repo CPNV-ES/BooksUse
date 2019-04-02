@@ -1,0 +1,55 @@
+﻿@model BooksUse.Models.Books
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h4>Ajouter un livre</h4>
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form id="form" asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Title" class="control-label"></label>
+                <input id="title" asp-for="Title" class="form-control check" />
+                <span id="titleError" asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Isbn" class="control-label"></label>
+                <input id="isbn" asp-for="Isbn" class="form-control check" />
+                <span id="isbnError" asp-validation-for="Isbn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Author" class="control-label"></label>
+                <input id="author" asp-for="Author" class="form-control" />
+                <span asp-validation-for="Author" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="UnitsInStock" class="control-label"></label>
+                <input id="unitsinstock" asp-for="UnitsInStock" class="form-control" />
+                <span asp-validation-for="UnitsInStock" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input id="price" asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input id="submitButton" type="submit" value="Ajouter" class="btn btn-outline-success submitBooksButton" disabled/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Start" asp-action="Index">Retour</a>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+<script type="text/javascript" src='/js/validateForm.min.js'></script>

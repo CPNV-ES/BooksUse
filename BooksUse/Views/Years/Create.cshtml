@@ -1,0 +1,30 @@
+﻿@model BooksUse.Models.Years
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>Générer une nouvelle année</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div class="form-group">
+                <label class="control-label">Générer l'année <strong>@(ViewBag.year)</strong> ?</label>
+                <label class="control-label">L'année générée va reprendre toutes les demandes approuvées de l'année précédente</label>
+                <label class="control-label">Cela va également clore les autres années</label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Générer" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retour</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

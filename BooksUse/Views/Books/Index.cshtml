@@ -1,0 +1,62 @@
+﻿@model IEnumerable<BooksUse.Models.Books>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h4>Liste des livres</h4>
+<br />
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary">Ajouter un livre</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr class="text-primary text-center">
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Isbn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Isbn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Author)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.UnitsInStock)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td class="text-center">
+                <a asp-action="Edit" asp-route-id="@item.Id"><i class="mdi mdi-pencil text-primary" style="font-size: 20px;"></i></a> 
+                @*<a asp-action="Details" asp-route-id="@item.Id">Details</a> |*@
+                <a asp-action="Delete" asp-route-id="@item.Id"><i class="mdi mdi-delete text-danger" style="font-size: 20px;"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

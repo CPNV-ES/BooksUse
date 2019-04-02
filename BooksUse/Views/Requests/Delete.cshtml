@@ -1,0 +1,42 @@
+﻿@model BooksUse.Models.Requests
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h4>Etes-vous sûr de vouloir supprimer cette demande ?</h4>
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FkBooksNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FkBooksNavigation.Title)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FkUsersNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.FkUsersNavigation.FirstName) @Html.DisplayFor(model => model.FkUsersNavigation.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.FkYearsNavigation)
+        </dt>
+        <dd class="col-sm-10">
+            <br />
+            <ul>
+                @foreach (SchoolClassesRequests item in Model.SchoolClassesRequests)
+                {
+                    <li>@item.FkSchoolClassesNavigation.Name</li>
+                }
+            </ul>
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Supprimer" class="btn btn-danger" /> |
+        <a asp-action="Index">Retour</a>
+    </form>
+</div>

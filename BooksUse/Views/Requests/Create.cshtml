@@ -1,0 +1,41 @@
+﻿@model BooksUse.Models.Requests
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h4>Ajouter une nouvelle demande</h4>
+<br />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" id="createForm">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="FkUsers" class="control-label"></label>
+                <select id="userSelect" asp-for="FkUsers" class="form-control" asp-items="ViewBag.FkUsers"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FkBooks" class="control-label"></label>
+                <select id="booksSelect" asp-for="FkBooks" class="form-control" asp-items="ViewBag.FkBooks"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SchoolClassesRequests" class="control-label">Classe(s)</label>
+                <select id="schoolClassesSelect" multiple="multiple" SelectionMode="Multiple" asp-for="SchoolClassesRequests" class="form-control" asp-items="ViewBag.SchoolClasses"></select>
+                <small class="form-text text-muted">Pour selectionner plusieurs classes utiliser la touche Ctrl+clic gauche</small>
+            </div>
+            <div class="form-group">
+                <input id="submitButton" type="submit" value="Ajouter" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Retour</a>
+</div>
+
+<script type="text/javascript" src='/js/userSelect.min.js'></script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

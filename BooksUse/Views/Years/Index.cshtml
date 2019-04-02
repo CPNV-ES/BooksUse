@@ -1,0 +1,51 @@
+﻿@model IEnumerable<BooksUse.Models.Years>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Liste des années</h4>
+<br />
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary">Générer une nouvelle année</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr class="text-primary text-center">
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Open)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td class="text-center">
+                @if (item.Open == true)
+                {
+                    <i class="mdi mdi-lock-open text-success" style="font-size: 20px;"></i>
+                }
+                else {
+                    <i class="mdi mdi-lock text-danger" style="font-size: 20px;"></i>
+                }
+
+                </td>
+            <td class="text-center">
+                @if (item.Open == true)
+                {
+                    <a asp-action="Close" asp-route-id="@item.Id"><i class="mdi mdi-lock-outline" style="font-size: 20px;"></i></a>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
