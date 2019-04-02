@@ -33,6 +33,7 @@ namespace BooksUse
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+           
 
             services.AddDbContext<BooksUseContext>(options =>
         options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -42,6 +43,9 @@ namespace BooksUse
                 options.DefaultRequestCulture = new RequestCulture("en-US");
             });
 
+            services.AddMvc(options => {
+                options.MaxValidationDepth = null;
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
