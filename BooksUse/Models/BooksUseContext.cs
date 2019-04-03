@@ -20,6 +20,8 @@ namespace BooksUse.Models
         public virtual DbSet<Roles> Roles { get; set; }
         public virtual DbSet<SchoolClasses> SchoolClasses { get; set; }
         public virtual DbSet<SchoolClassesRequests> SchoolClassesRequests { get; set; }
+        public virtual DbSet<SupplierSupplyBook> SupplierSupplyBook { get; set; }
+        public virtual DbSet<Suppliers> Suppliers { get; set; }
         public virtual DbSet<Users> Users { get; set; }
         public virtual DbSet<Years> Years { get; set; }
 
@@ -39,7 +41,7 @@ namespace BooksUse.Models
             modelBuilder.Entity<Books>(entity =>
             {
                 entity.HasIndex(e => e.Isbn)
-                    .HasName("UQ__Books__447D36EA2E2A4ECB")
+                    .HasName("UQ__Books__447D36EAD6FB3567")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
@@ -56,7 +58,9 @@ namespace BooksUse.Models
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Price).HasColumnName("price");
+                entity.Property(e => e.Price)
+                    .HasColumnName("price")
+                    .HasColumnType("decimal(6, 2)");
 
                 entity.Property(e => e.Title)
                     .IsRequired()
@@ -145,22 +149,61 @@ namespace BooksUse.Models
                     .HasConstraintName("FK_SchoolClasses");
             });
 
+            modelBuilder.Entity<SupplierSupplyBook>(entity =>
+            {
+                entity.ToTable("supplier_supply_book");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.BookId).HasColumnName("book_id");
+
+                entity.Property(e => e.Deldelay).HasColumnName("deldelay");
+
+                entity.Property(e => e.Price)
+                    .HasColumnName("price")
+                    .HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.SupplierId).HasColumnName("supplier_id");
+
+                entity.HasOne(d => d.Book)
+                    .WithMany(p => p.SupplierSupplyBook)
+                    .HasForeignKey(d => d.BookId)
+                    .HasConstraintName("fk_sup_book");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.SupplierSupplyBook)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("fk_sup_sup");
+            });
+
+            modelBuilder.Entity<Suppliers>(entity =>
+            {
+                entity.ToTable("suppliers");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Suppliername)
+                    .HasColumnName("suppliername")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
             modelBuilder.Entity<Users>(entity =>
             {
                 entity.HasIndex(e => e.Email)
-                    .HasName("UQ__Users__AB6E6164F63DBAF8")
+                    .HasName("UQ__Users__AB6E6164EFEDC157")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Initials)
-                    .HasName("UQ__Users__696DB02C8C6DC163")
+                    .HasName("UQ__Users__696DB02C176341C3")
                     .IsUnique();
 
                 entity.HasIndex(e => e.IntranetUserId)
-                    .HasName("UQ__Users__C5DF48D84168C926")
+                    .HasName("UQ__Users__C5DF48D809148643")
                     .IsUnique();
 
                 entity.HasIndex(e => e.Phone)
-                    .HasName("UQ__Users__B43B145FD07DDF44")
+                    .HasName("UQ__Users__B43B145FA4BAD1C9")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");

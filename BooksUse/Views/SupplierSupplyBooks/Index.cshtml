@@ -1,0 +1,45 @@
+﻿@model IEnumerable<BooksUse.Models.SupplierSupplyBook>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Livres et Fournisseurs</h4>
+<br />
+<table class="table">
+    <thead>
+        <tr class="text-primary text-center">
+            <th>
+                @Html.DisplayNameFor(model => model.Book)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Supplier)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deldelay)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Book.Title)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Supplier.Suppliername)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Price) chf
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Deldelay) jour(s)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

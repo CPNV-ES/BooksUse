@@ -1,0 +1,35 @@
+﻿@model BooksUse.Models.Years
+
+@{
+    ViewData["Title"] = "Close";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Voulez-vous vraiment cloturer l'année ?</h4>
+<div>
+    <hr />
+    <form asp-action="CloseConfirmed">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt class="col-sm-2">
+                Priorité commande
+            </dt>
+            <dd class="col-sm-10 form-group">
+                <select name="priority" id="priority" class="form-control">
+                    <option value="0">Livraison</option>
+                    <option value="1">Prix</option>
+                </select>
+            </dd>
+        </dl>
+
+
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Clore" class="btn btn-danger" /> |
+        <a asp-action="Index">Retour</a>
+    </form>
+</div>

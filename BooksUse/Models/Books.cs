@@ -8,6 +8,7 @@ namespace BooksUse.Models
         public Books()
         {
             Requests = new HashSet<Requests>();
+            SupplierSupplyBook = new HashSet<SupplierSupplyBook>();
         }
 
         public int Id { get; set; }
@@ -18,5 +19,6 @@ namespace BooksUse.Models
         public decimal? Price { get; set; }
 
         public virtual ICollection<Requests> Requests { get; set; }
+        public virtual ICollection<SupplierSupplyBook> SupplierSupplyBook { get; set; }
     }
 }

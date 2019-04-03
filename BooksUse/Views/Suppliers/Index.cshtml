@@ -1,0 +1,37 @@
+﻿@model IEnumerable<BooksUse.Models.Suppliers>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h4>Liste des fournisseurs</h4>
+<br />
+<p>
+    <a asp-action="Create" class="btn btn-outline-primary">Ajouter un fournisseur</a>
+</p>
+<table class="table">
+    <thead>
+        <tr class="text-primary text-center">
+            <th>
+                @Html.DisplayNameFor(model => model.Suppliername)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="text-center">
+            <td>
+                @Html.DisplayFor(modelItem => item.Suppliername)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id"><i class="mdi mdi-pencil text-primary" style="font-size: 20px;"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.Id"><i class="mdi mdi-delete text-danger" style="font-size: 20px;"></i></a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -153,28 +153,6 @@ namespace BooksUse.Controllers
             return View(years);
         }
 
-
-        public async Task<IActionResult> Close(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var years = await _context.Years.FindAsync(id);
-            if (years == null)
-            {
-                return NotFound();
-            }
-
-            years.Open = false;
-            _context.Update(years);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-
-
-        }
-
         // GET: Years/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -202,6 +180,49 @@ namespace BooksUse.Controllers
             _context.Years.Remove(years);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Years/Close/5
+        public async Task<IActionResult> Close(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var years = await _context.Years
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (years == null)
+            {
+                return NotFound();
+            }
+
+            return View(years);
+        }
+
+        // POST: Years/Close/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CloseConfirmed(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var years = await _context.Years.FindAsync(id);
+            if (years == null)
+            {
+                return NotFound();
+            }
+
+            var priority = Request.Form["priority"];
+
+            years.Open = false;
+            _context.Update(years);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", "SupplierSupplyBooks", new { priority = priority });
         }
 
         private bool YearsExists(int id)

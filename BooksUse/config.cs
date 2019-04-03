@@ -7,7 +7,7 @@ namespace BooksUse
 {
     public static class config
     {
-        public static int intranetId = 12;
+        public static int intranetId = 34;
         // IntranetId, Reference to database User table, intranetId field
         //      12 => Xavier Carrel : Professeur
         //      24 => Pascal Benzonana : Professeur
